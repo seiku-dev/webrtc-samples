@@ -98,7 +98,8 @@ function initRTC(opts){
             roomid : opts.roomid * 1,
             privateMapKey: opts.privateMapKey,
             role : "user",
-            pstnBizType: 1000   //pstn必备参数
+            pstnBizType: $("#pstnBizType").val(),
+            pstnPhoneNumber: $("#phonenum").val()
         };
         RTC.createRoom( param );
     },function( error ){
@@ -152,8 +153,19 @@ Bom = {
 	}
 };
 
+var phonenum = Bom.query("phonenum")
+var pstntype = Bom.query("pstntype")
+if( phonenum ){
+    $("#phonenum").val( phonenum)
+}
+if( pstntype ){
+    $("#pstnBizType").val( pstntype )
+}
+
 function login( closeLocalMedia ){
     sdkappid = Bom.query("sdkappid") || $("#sdkappid").val();
+
+
     userId = $("#userId").val();
     //请使用英文半角/数字作为用户名
     $.ajax({
