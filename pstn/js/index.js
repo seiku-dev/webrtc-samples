@@ -155,11 +155,19 @@ Bom = {
 
 var phonenum = Bom.query("phonenum")
 var pstntype = Bom.query("pstntype")
+var roomid = Bom.query("roomid")
+var sdkappid = Bom.query("sdkappid")
 if( phonenum ){
     $("#phonenum").val( phonenum)
 }
 if( pstntype ){
     $("#pstnBizType").val( pstntype )
+}
+if( roomid ){
+    $("#roomid").val( roomid )
+}
+if( sdkappid ){
+    $("#sdkappid").val( sdkappid )
 }
 
 function login( closeLocalMedia ){
