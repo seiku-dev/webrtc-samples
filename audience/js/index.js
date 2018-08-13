@@ -139,6 +139,9 @@ function initRTC(opts) {
     // });
     RTC.on("onErrorNotify", function (info) {
         console.error(info)
+        if( info.errorCode === RTC.getErrorCode().GET_LOCAL_CANDIDATE_FAILED){
+            alert( info.errorMsg )
+        }
     });
     RTC.on("onStreamNotify", function (info) {
         // console.warn('onStreamNotify', info)
