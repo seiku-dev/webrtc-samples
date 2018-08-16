@@ -60,6 +60,8 @@ function onLocalStreamAdd(info) {
 
 
 function onRemoteStreamUpdate(info) {
+
+    console.debug( info )
     // console.debug(info)
     if (info.stream && info.stream.active === true) {
         var id = info.videoId;
@@ -94,7 +96,7 @@ function initRTC(opts) {
     // opts.sdkappid= 1400096178
     // opts.userSig = "eJxNjstugzAQRf*FbavKjzhApSwigiio0KA8VGVjOWCSEYlxjdPQVvn3EkSlzvKcmXvnx1m-rp5EUTQXZbn90tJ5dpDzOGAopbJQgTQ97EA0J1CjElpDyYXl1JT-Ltqy5oPqGZ4ghPwpdr1Ryk6DkVxUdgjEk35hVJ-StNConhKEGSYU3WeUFs73rzAjHvZdj7p-ZXDocRrmQZwvDnnsTw187L4f3pjIsvpComhfpBGFTLF5d9wk15O-1PU1jysp38Ok9deBFvGxgmS1lFBtQnfLFH1JVbil9LwISGHms5lz*wVI9VfY"
     window.RTC = new WebRTCAPI({
-        useCloud: 1, //是否使用云上环境
+        useCloud: 0, //是否使用云上环境
         userId: opts.userId,
         userSig: opts.userSig,
         sdkAppId: opts.sdkappid,
