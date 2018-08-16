@@ -89,6 +89,51 @@ function onWebSocketClose() {
     RTC.quit();
 }
 
+
+Bom = {
+	/**
+	 * @description 读取location.search
+	 *
+	 * @param {String} n 名称
+	 * @return {String} search值
+	 * @example
+	 * 		$.bom.query('mod');
+	 */
+	query:function(n){ 
+		var m = window.location.search.match(new RegExp( "(\\?|&)"+n+"=([^&]*)(&|$)"));   
+		return !m ? "":decodeURIComponent(m[2]);  
+	},
+	getHash:function(n){
+		var m = window.location.hash.match(new RegExp( "(#|&)"+n+"=([^&]*)(&|$)"));
+		return !m ? "":decodeURIComponent(m[2]);  
+	}
+};
+
+
+var phonenum = Bom.query("phonenum")
+var pstntype = Bom.query("pstntype")
+var roomid = Bom.query("roomid")
+var sdkappid = Bom.query("sdkappid")
+var userId = Bom.query("userId")
+var useCloud = Bom.query("useCloud") ? parseInt(Bom.query("useCloud")) : 1;
+console.error('useCloud',useCloud)
+if( phonenum ){
+    $("#phonenum").val( phonenum)
+}
+if( pstntype ){
+    $("#pstnBizType").val( pstntype )
+}
+if( roomid ){
+    $("#roomid").val( roomid )
+}
+if( sdkappid ){
+    $("#sdkappid").val( sdkappid )
+}
+if( userId ){
+    $("#userId").val( userId )
+}
+
+
 function initRTC(opts) {
     // 初始化
     // opts.userId="xiaolin";
@@ -96,7 +141,7 @@ function initRTC(opts) {
     // opts.sdkappid= 1400096178
     // opts.userSig = "eJxNjstugzAQRf*FbavKjzhApSwigiio0KA8VGVjOWCSEYlxjdPQVvn3EkSlzvKcmXvnx1m-rp5EUTQXZbn90tJ5dpDzOGAopbJQgTQ97EA0J1CjElpDyYXl1JT-Ltqy5oPqGZ4ghPwpdr1Ryk6DkVxUdgjEk35hVJ-StNConhKEGSYU3WeUFs73rzAjHvZdj7p-ZXDocRrmQZwvDnnsTw187L4f3pjIsvpComhfpBGFTLF5d9wk15O-1PU1jysp38Ok9deBFvGxgmS1lFBtQnfLFH1JVbil9LwISGHms5lz*wVI9VfY"
     window.RTC = new WebRTCAPI({
-        useCloud: 0, //是否使用云上环境
+        useCloud: useCloud, //是否使用云上环境
         userId: opts.userId,
         userSig: opts.userSig,
         sdkAppId: opts.sdkappid,
