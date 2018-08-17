@@ -92,6 +92,10 @@ function onWebSocketClose() {
 function initRTC(opts){
     // 初始化
     window.RTC = new WebRTCAPI({
+        "debug":{
+            log:true,
+            vconsole:true
+        },
         "userId": opts.userId,
         "userSig": opts.userSig,
         "privMapEncrypt": opts.privMapEncrypt,
