@@ -268,11 +268,3 @@ function login(  ){
 }
 
 
-navigator.mediaDevices.enumerateDevices().then(function(deviceInfos){
-    // $("#allDevices").html( JSON.stringify(data) )
-    for (let i = 0; i !== deviceInfos.length; ++i) {
-        alert( JSON.stringify(deviceInfos[i]) )
-    }
-}).catch(function(){
-
-});

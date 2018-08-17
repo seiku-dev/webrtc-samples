@@ -9,6 +9,8 @@
   <title>Document</title>
 </head>
 <body>
+  ip:  <input id="ip" type="text"><button id="gather">Gather candidates</button>
+  <div id="ip_txt"></div>
   <section>
     <table id="candidates">
       <thead id="candidatesHead">
@@ -24,7 +26,7 @@
         </tr>
       </thead>
       <tbody id="candidatesBody"></tbody>
-    </table><button id="gather">Gather candidates</button>
+    </table>
   </section>
   <script>
     /*
@@ -109,12 +111,14 @@ var Bom = {
 
 
 
-var ip = Bom.query("ip") || "58.247.206.101";
+var ip = document.querySelector("#ip").value || Bom.query("ip") || "58.247.206.101";
 
   // var servers = [{"urls":["stun:14.215.139.223:8800"]}]
   var servers = [{"urls":["stun:"+ ip +":8800"]}]
   console.debug( 'ip',ip )
   function start() {
+
+    document.querySelector("#ip_txt").innerHTML = encodeURIComponent(ip)
   // Clean out the table.
   //   while (candidateTBody.firstChild) {
   //     candidateTBody.removeChild(candidateTBody.firstChild);
