@@ -134,6 +134,10 @@ function push(){
 
 var videoDevices = [];
 var audioDevices = [];
+var speakerDevices = [];
+var speakerIndex = 0;
+var audioIndex = 0;
+var videoIndex = 0;
 
 function listDevices(){
     //枚举摄像头
@@ -174,22 +178,50 @@ function listDevices(){
         }
         $("#audioDevices").html( html );
     });
+    
+    //枚举麦克风
+    RTC.getSpeakerDevices(function(devices) {
+        speakerDevices = devices
+        var deviceJsonList = [];
+        var html = '';
+        for(var a in devices){
+            console.debug( devices[a])
+            deviceJsonList.push({
+                label: devices[a].label,
+                deviceId: devices[a].deviceId
+            })
+            html += '<p>'+JSON.stringify({
+                label: devices[a].label,
+                deviceId: devices[a].deviceId
+            })+'</p>'
+        }
+        $("#speakerDevices").html( html );
+    });
 }
 
 // 切换设备
 function switchVideoDevice() {
     
-    // 采取随机的方式设置摄像头
-    var index = Math.floor(Math.random() * videoDevices.length);
-    RTC.chooseVideoDevice( videoDevices[index] );
+    videoIndex ++;
+    if(videoIndex == videoDevices.length )videoIndex = 0;
+    RTC.chooseVideoDevice( videoDevices[videoIndex] );
 }
 
 function switchAudioDevice(){
     
-    // 采取随机的方式设置麦克风
-    var index2 = Math.floor(Math.random() * audioDevices.length);
+    audioIndex ++;
+    if( audioIndex ==  audioDevices.length ) audioIndex = 0;
 
-    RTC.chooseAudioDevice( audioDevices[index2] );
+    RTC.chooseAudioDevice( audioDevices[audioIndex] );
+}
+
+function switchSpeakerDevice(){
+    speakerIndex ++;
+    if( speakerIndex ==  speakerDevices.length ) speakerIndex = 0;
+
+    $("#remote-video-wrap video").each(function(index, video){
+        RTC.chooseSpeakerDevice( video, speakerDevices[speakerIndex] );
+    })
 }
 
 function login(  ){
@@ -235,3 +267,9 @@ function login(  ){
     })
 }
 
+
+navigator.mediaDevices.enumerateDevices().then(function(data){
+    $("#allDevices").html( data )
+}).catch(function(){
+
+});
