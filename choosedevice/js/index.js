@@ -269,7 +269,7 @@ function login(  ){
 
 
 navigator.mediaDevices.enumerateDevices().then(function(data){
-    $("#allDevices").html( data )
+    $("#allDevices").html( JSON.stringify(data) )
 }).catch(function(){
 
 });
