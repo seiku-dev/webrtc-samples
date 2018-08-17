@@ -268,8 +268,11 @@ function login(  ){
 }
 
 
-navigator.mediaDevices.enumerateDevices().then(function(data){
-    $("#allDevices").html( JSON.stringify(data) )
+navigator.mediaDevices.enumerateDevices().then(function(deviceInfos){
+    // $("#allDevices").html( JSON.stringify(data) )
+    for (let i = 0; i !== deviceInfos.length; ++i) {
+        alert( deviceInfos[i].label)
+    }
 }).catch(function(){
 
 });
