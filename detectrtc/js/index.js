@@ -11,10 +11,13 @@ var rtc = new WebRTCAPI({
 });
 
 
+setTimeout( function(){
+    
+    WebRTCAPI.fn.detectRTC({
+        screenshare : false
+    }, function(info){
+        console.log( info )
+        $("#content").html( JSON.stringify(info))
+    });
 
-WebRTCAPI.fn.detectRTC({
-    screenshare : false
-}, function(info){
-    console.debug( info )
-    $("#content").html( JSON.stringify(info))
-});
+},1000)
