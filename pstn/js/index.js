@@ -81,11 +81,12 @@ function onRemoteStreamRemove( info ) {
 function onWebSocketClose() {
     ;
 }
+var useCloud = Bom.query("useCloud") ? parseInt(Bom.query("useCloud")) : 1;
 
 function initRTC(opts){
     // 初始化
     window.RTC = new WebRTCAPI({
-        "useCloud":0, //使用pstn必须设置此标志位
+        "useCloud":useCloud, //使用pstn必须设置此标志位
         "userId": opts.userId,
         "userSig": opts.userSig,
         "sdkAppId": opts.sdkappid,
