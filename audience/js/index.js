@@ -249,7 +249,7 @@ function chooseAudio(index) {
 
 function login(closeLocalMedia) {
     sdkappid = Bom.query("sdkappid") || $("#sdkappid").val();
-    // userId = "test123";// $("#userId").val();
+    userId = $("#userId").val();
     //请使用英文半角/数字作为用户名
     $.ajax({
         type: "POST",
