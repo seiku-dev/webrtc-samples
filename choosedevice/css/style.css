@@ -203,3 +203,5 @@ audio{
     height:70px;
     display: block;
 }
+
+p{    word-wrap: break-word;}

@@ -208,6 +208,8 @@ function switchVideoDevice() {
     
     videoIndex ++;
     if(videoIndex == videoDevices.length )videoIndex = 0;
+    
+    console.debug('switchVideoDevice',videoIndex, videoDevices[videoIndex])
     RTC.chooseVideoDevice( videoDevices[videoIndex] );
 }
 
