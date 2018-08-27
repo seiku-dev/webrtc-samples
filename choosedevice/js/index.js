@@ -93,8 +93,7 @@ function initRTC(opts){
     // 初始化
     window.RTC = new WebRTCAPI({
         "debug":{
-            log:true,
-            vconsole:true
+            log:true
         },
         "userId": opts.userId,
         "userSig": opts.userSig,
