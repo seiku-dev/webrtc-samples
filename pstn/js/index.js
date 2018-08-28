@@ -112,7 +112,7 @@ function initRTC(opts){
         "accountType": opts.accountType,
         "closeLocalMedia": opts.closeLocalMedia,
         "audio":true,
-        "video":false
+        "video":true
     },function(){
         var param = {
             roomid : opts.roomid * 1,
