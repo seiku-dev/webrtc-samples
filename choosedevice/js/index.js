@@ -106,7 +106,7 @@ function initRTC(opts){
             roomid : opts.roomid * 1,
             role : "user",
             constraints:{
-                video:videoDevices[1]
+                video:videoDevices[0]
             }
         });
     },function( error ){
