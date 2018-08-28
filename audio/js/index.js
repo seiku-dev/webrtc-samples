@@ -18,9 +18,8 @@ var sdkappid,
     userSig,
     username;
 
-
 function onKickout() {
-    alert("on kick out!");
+    alert("on kick out!!");
 }
 
 function onRelayTimeout(msg) {
