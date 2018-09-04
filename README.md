@@ -41,6 +41,7 @@
 |    pushStream    | 视频流推流/切换demo （屏幕分享/摄像头/Canvas)      |
 |    screenshare    | 屏幕分享       |
 |    choosedevice    | 设备选择       |
+| quickstart | 快速上手页 |
 
 ### 
 ___
