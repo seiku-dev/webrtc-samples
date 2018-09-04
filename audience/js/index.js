@@ -69,7 +69,9 @@ function onRemoteStreamUpdate(info) {
         if (!video) {
             video = createVideoElement(id);
         }
-        video.srcObject = info.stream;
+        setTimeout(function(){
+            video.srcObject = info.stream;
+        },50)        
     } else {
         // console.log('欢迎用户' + info.userId + '加入房间');
     }
