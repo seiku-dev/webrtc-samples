@@ -109,7 +109,6 @@ Bom = {
 	}
 };
 
-
 $("#userId").val("video_" + parseInt(Math.random() * 100000000));
 var phonenum = Bom.query("phonenum")
 var pstntype = Bom.query("pstntype")
@@ -117,6 +116,7 @@ var roomid = Bom.query("roomid")
 var sdkappid = Bom.query("sdkappid")
 var userId = Bom.query("userId")
 var useCloud = Bom.query("useCloud") ? parseInt(Bom.query("useCloud")) : 1;
+var privmap = Bom.query("privmap") ? parseInt(Bom.query("privmap")) : 255;
 console.error('useCloud',useCloud)
 if( phonenum ){
     $("#phonenum").val( phonenum)
@@ -132,6 +132,8 @@ if( sdkappid ){
 }
 if( userId ){
     $("#userId").val( userId )
+}if( privmap ){
+    $("#privmap").val( privmap )
 }
 
 function initRTC(opts) {
@@ -153,8 +155,8 @@ function initRTC(opts) {
     }, function () {
         RTC.createRoom({
             roomid: opts.roomid * 1,
-            privateMap:255,
-            privateMapKey: opts.privateMapKey,
+            privateMap: parseInt( $("#privmap").val() ),
+            // privateMapKey: opts.privateMapKey,
             role: "user",
             // role : "wp1280",
             /* constraints: { 
