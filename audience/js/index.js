@@ -36,13 +36,7 @@ function onRelayTimeout(msg) {
 
 function createVideoElement(id, isLocal) {
     var videoDiv = document.createElement("div");
-    WebRTCAPI.detectRTC( {screen:false},function(info ){
-        if( info.isSafari ){
-            videoDiv.innerHTML = '<video id="' + id + '" autoplay ' + (isLocal ? 'muted' : '') + ' playsinline controls ></video>';
-        }else{
-            videoDiv.innerHTML = '<video id="' + id + '" autoplay ' + (isLocal ? 'muted' : '') + ' playsinline c ></video>';
-        }
-    });
+    videoDiv.innerHTML = '<video id="' + id + '" autoplay ' + (isLocal ? 'muted' : '') + ' playsinline controls ></video>';
     document.querySelector("#remote-video-wrap").appendChild(videoDiv);
 
     return document.getElementById(id);
