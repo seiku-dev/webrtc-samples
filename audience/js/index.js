@@ -36,13 +36,7 @@ function onRelayTimeout(msg) {
 
 function createVideoElement(id, isLocal) {
     var videoDiv = document.createElement("div");
-    WebRTCAPI.detectRTC( {screen:false},function(info ){
-        if( info.isSafari ){
-            videoDiv.innerHTML = '<video id="' + id + '" autoplay ' + (isLocal ? 'muted' : '') + ' playsinline controls ></video>';
-        }else{
-            videoDiv.innerHTML = '<video id="' + id + '" autoplay ' + (isLocal ? 'muted' : '') + ' playsinline c ></video>';
-        }
-    });
+    videoDiv.innerHTML = '<video id="' + id + '" autoplay ' + (isLocal ? 'muted' : '') + ' playsinline ></video>';
     document.querySelector("#remote-video-wrap").appendChild(videoDiv);
 
     return document.getElementById(id);
@@ -268,7 +262,7 @@ function login(closeLocalMedia) {
             pwd: "12345678",
             appid: parseInt(sdkappid),
             roomnum: parseInt($("#roomid").val()),
-            privMap: parseInt( $("#privmap").val() ),
+            privMap: 255,
             identifier: userId,
             accounttype: accountType
         }),
