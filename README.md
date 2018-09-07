@@ -1,37 +1,54 @@
-# webrtc-samples
-
-#### 项目介绍
-webrtc-samples
-
-#### 软件架构
-软件架构说明
+## 最新 SDK CDN地址
 
 
-#### 安装教程
+#### CDN
 
-1. xxxx
-2. xxxx
-3. xxxx
+```html
+<!-- 请使用最新版本 CDN -->
+<script src="https://sqimg.qq.com/expert_qq/webrtc/2.6.2/WebRTCAPI.min.js" >
+```
 
-#### 使用说明
+#### npm
 
-1. xxxx
-2. xxxx
-3. xxxx
+```
+    npm install trtc-sdk;
+```
+## 项目简介
 
-#### 参与贡献
+本项目以实时音视频WebRTC SDK 实现了一些简单的代码示例，方便开发者接入时作为参考。
+更为详细的接口API，请移步我们的 [API文档](https://cloud.tencent.com/document/product/647/17249)
 
-1. Fork 本项目
-2. 新建 Feat_xxx 分支
-3. 提交代码
-4. 新建 Pull Request
+### 示例
+
+- 观众模式（纯观看）
+- 纯音频模式
+
+以下示例敬请期待
+
+- 屏幕分享
+- 本地混流
+- 本地录制
+
+### 目录说明
+
+|    目录     | 说明         |
+| :---------: | ------------ |
+| abilitytest | 能力测试     |
+|   assets    | demo资源文件 |
+|  audience   | 纯观看模式   |
+|    audio    | 纯音频       |
+|    invite    | 视频邀请的demo示例       |
+|    pushStream    | 视频流推流/切换demo （屏幕分享/摄像头/Canvas)      |
+|    screenshare    | 屏幕分享       |
+|    choosedevice    | 设备选择       |
+| quickstart | 快速上手页 |
+
+### 
+___
+
+### 我们也准备了接近产品化方案的demo
+
+[与小程序互通](https://github.com/TencentVideoCloudMLVBDev/webrtc_web_source)
 
 
-#### 码云特技
 
-1. 使用 Readme\_XXX.md 来支持不同的语言，例如 Readme\_en.md, Readme\_zh.md
-2. 码云官方博客 [blog.gitee.com](https://blog.gitee.com)
-3. 你可以 [https://gitee.com/explore](https://gitee.com/explore) 这个地址来了解码云上的优秀开源项目
-4. [GVP](https://gitee.com/gvp) 全称是码云最有价值开源项目，是码云综合评定出的优秀开源项目
-5. 码云官方提供的使用手册 [http://git.mydoc.io/](http://git.mydoc.io/)
-6. 码云封面人物是一档用来展示码云会员风采的栏目 [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
