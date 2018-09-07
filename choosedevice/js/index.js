@@ -3,7 +3,7 @@
     为了保持在功能演示方面的简洁， demo不会做任何合法性校验
 */
 
-// 本demo用到的唯一一个CGI，获取usersig （什么是usersig? 请看 https://sxb.qcloud.com/webrtcapi/ )
+// 本demo用到的唯一一个CGI，获取usersig （什么是usersig? 请看 https://www.qcloudtrtc.com/webrtcapi/ )
 // 如果您不了解非对称加密，可以这样简单理解：
 // 你有公钥 和 私钥 两把钥匙，腾讯云有一把钥匙（公玥）
 // 你把数据丢盒子里，并且用私钥上锁，然后把上了锁的盒子给到腾讯云
@@ -12,7 +12,7 @@
 // 去控制台把私钥下载下来，用TLS工具算一个签名（usersig)
 
 //不要把您的sdkappid填进来就用这个cgi去测，测试demo的cgi没有您的私钥，臣妾做不到啊
-var FetchSigCgi = 'https://sxb.qcloud.com/sxb_dev/?svc=account&cmd=authPrivMap';
+var FetchSigCgi = 'https://www.qcloudtrtc.com/sxb_dev/?svc=account&cmd=authPrivMap';
 var sdkappid,
     accountType = 14418, // accounttype 还是在文档中会找到
     userSig,
@@ -89,6 +89,20 @@ function onWebSocketClose() {
     ;
 }
 
+
+function gotStream( opt ,succ){
+    RTC.getLocalStream({
+        video:true,
+        audio:true,
+        videoDevice:opt.videoDevice
+    },function(info){
+        var stream = info.stream;
+        succ ( stream )
+    });
+
+
+}
+
 function initRTC(opts){
     // 初始化
     window.RTC = new WebRTCAPI({
@@ -97,21 +111,24 @@ function initRTC(opts){
         },
         "userId": opts.userId,
         "userSig": opts.userSig,
-        "privMapEncrypt": opts.privMapEncrypt,
-        "sdkAppId": opts.sdkappid,
-        "accountType": opts.accountType,
-        "closeLocalMedia": opts.closeLocalMedia
-    },function(){
-        RTC.createRoom({
-            roomid : opts.roomid * 1,
-            role : "user",
-            constraints:{
-                video:videoDevices[0]
-            }
-        });
-    },function( error ){
-        console.error("init error", error)
+        "sdkAppId": opts.sdkappid
     });
+    
+    
+    RTC.createRoom({
+        roomid : opts.roomid * 1,
+        privMap: 255
+    },function(){
+        gotStream({
+            videoDevice: videoDevices[0]
+        },function(stream){
+            RTC.startRTC({
+                stream: stream,
+                role: 'user'
+            });
+        })
+    });
+
 
     // 远端流新增/更新
     RTC.on("onRemoteStreamUpdate",onRemoteStreamUpdate)
@@ -123,7 +140,10 @@ function initRTC(opts){
     RTC.on("onKickout",onKickout)
     // 服务器超时
     RTC.on("onRelayTimeout",onRelayTimeout)
-    
+    // 服务器超时
+    RTC.on("onErrorNotify",function(error){
+        console.error( error );
+    }) 
     //枚举设备
     listDevices();
 }
