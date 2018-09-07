@@ -111,7 +111,8 @@ function initRTC(opts){
         },
         "userId": opts.userId,
         "userSig": opts.userSig,
-        "sdkAppId": opts.sdkappid
+        "sdkAppId": opts.sdkappid,
+        "closeLocalMedia":true
     });
     
     
