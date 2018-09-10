@@ -36,7 +36,7 @@ function onRelayTimeout(msg) {
 
 function createVideoElement(id, isLocal) {
     var videoDiv = document.createElement("div");
-    videoDiv.innerHTML = '<video id="' + id + '" autoplay ' + (isLocal ? 'muted' : '') + ' playsinline controls ></video>';
+    videoDiv.innerHTML = '<video id="' + id + '" autoplay ' + (isLocal ? 'muted' : '') + ' playsinline  ></video>';
     document.querySelector("#remote-video-wrap").appendChild(videoDiv);
 
     return document.getElementById(id);

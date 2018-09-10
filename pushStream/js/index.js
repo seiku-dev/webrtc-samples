@@ -306,9 +306,9 @@ function getMediaStream( type ,callback ){
         console.debug( 'camera ')
         RTC.getLocalStream({
             attributes:{
-                width:640,
-                height:320,
-                frameRate:20
+                width:400,
+                height:400,
+                frameRate:15
             }
         },function(info){
             console.debug('getLocalStream succ', info.stream)
