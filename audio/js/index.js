@@ -40,6 +40,76 @@ function createAudioElement( id, isLocal ){
     return audioNode;
 }
 
+var context = new AudioContext();
+
+
+
+function addBGM(msg) {
+    RTC.stopRTC({},function(){
+        gotStream({},function(stream){
+            var microphone = context.createMediaStreamSource(stream);
+            var backgroundMusic = context.createMediaElementSource(document.getElementById("bgm"));
+            var analyser = context.createAnalyser();
+            var mixedOutput = context.createMediaStreamDestination();
+            microphone.connect(analyser);
+            analyser.connect(mixedOutput);
+            backgroundMusic.connect(mixedOutput);
+            RTC.startRTC({
+                stream: mixedOutput.stream,
+                role: 'user'
+            });
+        })
+    })
+
+}
+
+function getComputerAudio( callback ){
+    // funciont 1
+    // 枚举音频输入设备 -> 先获取PC的音频混流设备
+    // 具体是哪个 device，这里每台电脑恐怕都不一样。
+    // 可能是最后一个？
+    // device 的item会像这样：{"label":"扬声器 (Realtek High Definition Audio)","deviceId":"95a3e76b348d181fca042eada7428dcf98df9d0129fb9a5c7a54619d3428387c"}
+   /* 
+     RTC.getAudioDevices(function(devices) {
+       
+        var device = devices[ devices.length - 1];
+        console.error( devices[0])
+        // 这个音频流包含麦克风和PC电脑音频
+        RTC.getLocalStream({
+            video:false,
+            audio:true,
+            audioDevice:device
+        },function( info ){
+            callback( info.stream )
+        });
+    });
+   */
+
+    // funciont 2
+    // 目前测试 ，使用PC的默认输出是可以的。
+    // audioDevice:{
+    //     deviceId:"default"
+    // }
+    RTC.getLocalStream({
+        video:false,
+        audio:true,
+        audioDevice:{
+            deviceId:"default"
+        }
+    },function( info ){
+        callback( info.stream )
+    });
+}
+function addComputer() {
+    RTC.stopRTC({},function(){
+        getComputerAudio( function( pc_stream){
+            RTC.startRTC({
+                stream: pc_stream,
+                role: 'user'
+            });
+        })
+    })
+}
 
 function onLocalStreamAdd(info) {
     if (info.stream && info.stream.active === true)
@@ -95,25 +165,42 @@ function onWebSocketClose() {
     RTC.quit();
 }
 
+
+function gotStream( opt ,succ){
+    RTC.getLocalStream({
+        video:false, //不采集视频
+        audio:true
+    },function(info){
+        var stream = info.stream;
+        succ ( stream )
+    });
+}
+
 function initRTC(opts){
-    // 初始化
+
+      // 初始化
     window.RTC = new WebRTCAPI({
-        "userId": opts.username,
+        "debug":{
+            log:true
+        },
+        "userId": opts.userId,
         "userSig": opts.userSig,
-        "privateMapKey": opts.privateMapKey,
-        "sdkAppId": opts.sdkappid,
-        "accountType": opts.accountType,
-        "video": false
+        "sdkAppId": opts.sdkappid
+    });
+    
+    
+    RTC.createRoom({
+        roomid : opts.roomid * 1,
+        privMap: 255,
+        recordId: $("#recordId").val() || null,
+        pureAudioPushMod: $("#pureAudioPushMod").val(),
     },function(){
-        RTC.createRoom({
-            roomid : opts.roomid * 1,
-            privateMapKey: opts.privateMapKey,
-            role : "user",
-            recordId: $("#recordId").val() || null,
-            pureAudioPushMod: $("#pureAudioPushMod").val(),
-        });
-    },function( error ){
-        console.error("init error", error)
+        gotStream({},function(stream){
+            RTC.startRTC({
+                stream: stream,
+                role: 'user'
+            });
+        })
     });
 
     // 远端流新增/更新
@@ -124,15 +211,11 @@ function initRTC(opts){
     RTC.on("onRemoteStreamRemove",onRemoteStreamRemove)
     // 重复登录被T
     RTC.on("onKickout",onKickout)
-    RTC.on("onErrorNotify",function(e){
-        console.error(e)
-    })
+    RTC.on("onErrorNotify",function(e){ console.error(e); });
     // 服务器超时
     RTC.on("onRelayTimeout",onRelayTimeout)
     // just for debugging
-    RTC.on("*",function(e){
-        console.debug(e)
-    });
+    RTC.on("*",function(e){ console.debug(e); });
 }
 $("#username").val("audio_"+ parseInt(Math.random()*100000000));
 function login(){
@@ -161,7 +244,7 @@ function login(){
                 $("#input-container").hide();
 
                 initRTC({
-                    "username": username,
+                    "userId": username,
                     "userSig": userSig,
                     "privMapEncrypt": privateMapKey,
                     "sdkappid": sdkappid,
