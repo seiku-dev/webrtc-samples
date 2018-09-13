@@ -99,8 +99,6 @@ function gotStream( opt ,succ){
         var stream = info.stream;
         succ ( stream )
     });
-
-
 }
 
 function initRTC(opts){
@@ -225,26 +223,21 @@ function listDevices(){
 
 // 切换设备
 function switchVideoDevice() {
-    
     videoIndex ++;
     if(videoIndex == videoDevices.length )videoIndex = 0;
-    
     console.debug('switchVideoDevice',videoIndex, videoDevices[videoIndex])
     RTC.chooseVideoDevice( videoDevices[videoIndex] );
 }
 
 function switchAudioDevice(){
-    
     audioIndex ++;
     if( audioIndex ==  audioDevices.length ) audioIndex = 0;
-
     RTC.chooseAudioDevice( audioDevices[audioIndex] );
 }
 
 function switchSpeakerDevice(){
     speakerIndex ++;
     if( speakerIndex ==  speakerDevices.length ) speakerIndex = 0;
-
     $("#remote-video-wrap video").each(function(index, video){
         RTC.chooseSpeakerDevice( video, speakerDevices[speakerIndex] );
     })

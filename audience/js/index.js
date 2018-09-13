@@ -138,42 +138,44 @@ if( userId ){
     $("#privmap").val( privmap )
 }
 
+function gotStream( opt ,succ){
+    RTC.getLocalStream({
+        video:true,
+        audio:true,
+        videoDevice:opt.videoDevice
+    },function(info){
+        var stream = info.stream;
+        succ ( stream )
+    });
+}
+
+
 function initRTC(opts) {
+    
     // 初始化
-    // opts.userId="xiaolin";
-    // opts.roomid=152658223;
-    // opts.sdkappid= 1400096178
-    // opts.userSig = "eJxNjstugzAQRf*FbavKjzhApSwigiio0KA8VGVjOWCSEYlxjdPQVvn3EkSlzvKcmXvnx1m-rp5EUTQXZbn90tJ5dpDzOGAopbJQgTQ97EA0J1CjElpDyYXl1JT-Ltqy5oPqGZ4ghPwpdr1Ryk6DkVxUdgjEk35hVJ-StNConhKEGSYU3WeUFs73rzAjHvZdj7p-ZXDocRrmQZwvDnnsTw187L4f3pjIsvpComhfpBGFTLF5d9wk15O-1PU1jysp38Ok9deBFvGxgmS1lFBtQnfLFH1JVbil9LwISGHms5lz*wVI9VfY"
     window.RTC = new WebRTCAPI({
-        useCloud: useCloud, //是否使用云上环境
-        userId: opts.userId,
-        userSig: opts.userSig,
-        sdkAppId: opts.sdkappid,
-        accountType: opts.accountType,
-        wsRetryMaxTimes: 5, //最大重连次数 
-        wsRetryDist: 3000, //毫秒 ，首次间隔3000毫秒， 第N次重连间隔 为 N * DIST （ 2 * 3000） 
-        closeLocalMedia: opts.closeLocalMedia,
-        // video:false
-    }, function () {
-        RTC.createRoom({
-            roomid: opts.roomid * 1,
-            privateMap: parseInt( $("#privmap").val() ),
-            // privateMapKey: opts.privateMapKey,
-            role: "user",
-            // role : "wp1280",
-            /* constraints: { 
-                video: devices.video[1],
-                audio:devices.audio[1]
-            } */
-            // pstnBizType: parseInt($("#pstnBizType").val() || 0),
-            // pstnPhoneNumber:  $("#pstnPhoneNumber").val()
-        }, function (info) {
-            console.warn("init succ", info)
-        }, function (error) {
-            console.error("init error", error)
-        });
-    }, function (error) {
-        // console.warn("init error", error)
+        "debug":{
+            log:true
+        },
+        "userId": opts.userId,
+        "userSig": opts.userSig,
+        "sdkAppId": opts.sdkappid
+    });
+    
+    
+    RTC.createRoom({
+        roomid : opts.roomid * 1,
+        privMap: 255
+    },function(){
+        gotStream({
+            audio:true,
+            video:true
+        },function(stream){
+            RTC.startRTC({
+                stream: stream,
+                role: 'user'
+            });
+        })
     });
 
     // 远端流新增/更新

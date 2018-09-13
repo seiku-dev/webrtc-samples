@@ -44,9 +44,10 @@ var context = new AudioContext();
 
 
 
-function addBGM(msg) {
+function addBGM() {
+    document.getElementById("bgm").play();
     RTC.stopRTC({},function(){
-        gotStream({},function(stream){
+        gotStream(function(stream){
             var microphone = context.createMediaStreamSource(stream);
             var backgroundMusic = context.createMediaElementSource(document.getElementById("bgm"));
             var analyser = context.createAnalyser();
@@ -166,7 +167,7 @@ function onWebSocketClose() {
 }
 
 
-function gotStream( opt ,succ){
+function gotStream( succ ){
     RTC.getLocalStream({
         video:false, //不采集视频
         audio:true
@@ -195,7 +196,7 @@ function initRTC(opts){
         recordId: $("#recordId").val() || null,
         pureAudioPushMod: $("#pureAudioPushMod").val(),
     },function(){
-        gotStream({},function(stream){
+        gotStream(function(stream){
             RTC.startRTC({
                 stream: stream,
                 role: 'user'

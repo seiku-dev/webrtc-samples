@@ -248,13 +248,13 @@ function startRTC( name ){
         //进入房间，进行推流
         RTC.createRoom({
             roomid: $("#roomid").val() * 1,
-            role: name == 'screen' ?  "wp1280" : 'user',
         }, function (info) {
             if( name ==='audience') {
                 return;
             }
             RTC.startRTC({
-                stream : stream.clone()
+                stream : stream.clone(),
+                role: name == 'screen' ?  "wp1280" : 'user'
             }, function (info) {
                 console.debug('推流成功');
             }, function (error) {

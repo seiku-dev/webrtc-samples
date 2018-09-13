@@ -101,26 +101,17 @@ function initRTC(opts){
         accountType: opts.accountType,
         wsRetryMaxTimes:3,//次数
         wsRetryDist: 100 //时间间隔，单位（毫秒）
-    },function(){
-        RTC.createRoom({
-            roomid : opts.roomid * 1,
-            privateMapKey: opts.privateMapKey,
-            role : "user",
-            // role : "wp1280",
-            /* constraints: { 
-                video: devices.video[1],
-                audio:devices.audio[1]
-            } */
-            // pstnBizType: parseInt($("#pstnBizType").val() || 0),
-            // pstnPhoneNumber:  $("#pstnPhoneNumber").val()
-        },function( info ){ 
-            console.warn("init succ", info)
-        }
-        ,function( error ){
-            console.error("init error", error)
-        });
-    },function( error ){
-        console.warn("init error", error)
+    });
+
+
+    RTC.createRoom({
+        roomid : opts.roomid * 1,
+        privateMapKey: opts.privateMapKey
+    },function( info ){ 
+        console.warn("init succ", info)
+    }
+    ,function( error ){
+        console.error("init error", error)
     });
 
     // 远端流新增/更新
@@ -176,7 +167,9 @@ function stopWs(){
    RTC.global.websocket.close();
 }
 function startRTC(){
-    RTC.startRTC(0 , function( info ){
+    RTC.startRTC({
+        role : "user"
+    } , function( info ){
         console.debug( info )
     },function( info ){
         console.debug( info )
@@ -217,7 +210,7 @@ Bom = {
 	}
 };
 
-function login( closeLocalMedia ){
+function login(  ){
     sdkappid = Bom.query("sdkappid") || $("#sdkappid").val();
     userId = $("#userId").val();
     //请使用英文半角/数字作为用户名
@@ -247,8 +240,6 @@ function login( closeLocalMedia ){
                     "userSig": userSig,
                     "privateMapKey": privateMapKey,
                     "sdkappid": sdkappid,
-                    "accountType": accountType,
-                    "closeLocalMedia": closeLocalMedia,
                     "roomid": $("#roomid").val()
                 });
 

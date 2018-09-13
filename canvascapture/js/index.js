@@ -18,7 +18,6 @@ var context = canvasEle.getContext("2d");
 function redraw() {
     context.fillStyle = "#fff";   
     context.fillRect(0, 0, 1, 1);  
-    console.debug('redraw')
 }
 function getcanvasStream() {
   var canvasW = canvasEle.width;
@@ -123,24 +122,21 @@ function initRTC(opts){
         sdkAppId: opts.sdkappid,
         accountType: opts.accountType,
         closeLocalMedia: true
-    },function(){
-        RTC.createRoom({
-            roomid : opts.roomid * 1,
-            privateMapKey: opts.privateMapKey,
-            role : "user",
+    });
+    RTC.createRoom({
+        roomid : opts.roomid * 1,
+        privateMapKey: opts.privateMapKey
+    },function(info){
+        RTC.startRTC({
+            stream: canvasStream,
+            role:'user'
         },function(info){
-            RTC.startRTC({
-                canvas: canvasStream
-            },function(info){
-                console.debug('推流成功');
-            },function(error){
-                console.error('推流失败',error)
-            });
+            console.debug('推流成功');
         },function(error){
-            console.error('error')
+            console.error('推流失败',error)
         });
-    },function( error ){
-        console.error("init error", error)
+    },function(error){
+        console.error('error')
     });
 
     // 远端流新增/更新

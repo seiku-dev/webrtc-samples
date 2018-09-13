@@ -72,16 +72,21 @@ function initRTC(opts){
         "userId": opts.userId,
         "userSig": opts.userSig,
         "sdkAppId": opts.sdkappid,
-        "accountType": opts.accountType,
-        "closeLocalMedia": opts.closeLocalMedia
+        "accountType": opts.accountType
+    });
+
+    RTC.createRoom({
+        roomid : opts.roomid * 1,
+        role : "user"
     },function(){
-        RTC.createRoom({
-            roomid : opts.roomid * 1,
-            role : "user"
+        RTC.startRTC({
+            audio:true,
+            video:true
         });
     },function( error ){
         console.error("init error", error)
     });
+
 
     // 远端流新增/更新
     RTC.on("onRemoteStreamUpdate",onRemoteStreamUpdate)
@@ -131,8 +136,6 @@ function login( closeLocalMedia ){
                     "userId": userId,
                     "userSig": userSig,
                     "sdkappid": sdkappid,
-                    "accountType": accountType,
-                    "closeLocalMedia": closeLocalMedia,
                     "roomid": $("#roomid").val()
                 });
             }else{
