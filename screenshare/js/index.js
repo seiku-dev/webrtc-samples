@@ -100,8 +100,7 @@ function initRTC(opts) {
         userId: opts.userId,
         userSig: opts.userSig,
         sdkAppId: opts.sdkappid,
-        accountType: opts.accountType,
-        closeLocalMedia: true //手动调用推流接口
+        accountType: opts.accountType
     });
 
     //枚举麦克风
@@ -111,7 +110,6 @@ function initRTC(opts) {
         var deviceJsonList = [];
         var html = '';
         for(var a in devices){
-            console.debug( devices[a])
             deviceJsonList.push({
                 label: devices[a].label,
                 deviceId: devices[a].deviceId
@@ -196,6 +194,7 @@ function getMediaStream( type ,callback ){
                 frameRate:20
             }
         },function(info){
+            console.error('camera')
             console.debug('getLocalStream succ', info.stream)
             streams['camera'] = info.stream
             callback( info.stream )
@@ -207,12 +206,12 @@ function getMediaStream( type ,callback ){
 
 
 function getScreen() {
-    getMediaStream('screen', function(stream){
+    getMediaStream('screen', function(){
         startRTC('screen');
     })
 }
 function getCamera() {
-    getMediaStream('camera', function(stream){
+    getMediaStream('camera', function(){
         startRTC('camera');
     })
 }
