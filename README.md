@@ -5,7 +5,7 @@
 
 ```html
 <!-- 请使用最新版本 CDN -->
-<script src="https://sqimg.qq.com/expert_qq/webrtc/2.6.2/WebRTCAPI.min.js" >
+<script src="https://sqimg.qq.com/expert_qq/webrtc/3.0/WebRTCAPI.min.js" >
 ```
 
 #### npm
