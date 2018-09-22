@@ -402,7 +402,7 @@ function startBrowserTest(){
                 if( isMobile.iOS()  ){
                     //ios 11 版本 11.0.3 以下不支持
                     var matches = (navigator.userAgent).match(/OS (\d+)_(\d+)_?(\d+)?/);
-                    if(matches && matches[1]>=11 && matches[3] >= 3){
+                    if(matches && (matches[1]>11 || (matches[1]==11 && matches[3] >= 3))){
                         $("#browser-title").css("background", "#90dc90");
                         titleText =  a + " 当前浏览器支持 !!!";
                     }else{
