@@ -116,44 +116,43 @@ function initRTC(opts){
         "useCloud":1,
         "userId": opts.userId,
         "userSig": opts.userSig,
-        "sdkAppId": opts.sdkappid,
-        "accountType": opts.accountType,
-        "closeLocalMedia": opts.closeLocalMedia
+        "sdkAppId": opts.sdkappid
+    });
+
+    RTC.createRoom({
+        roomid : opts.roomid * 1,
+        privateMapKey: opts.privateMapKey,
+        role : "user",
+        pstnBizType: parseInt($("#pstnBizType").val() || 0),
+        pstnPhoneNumber:  $("#pstnPhoneNumber").val()
     },function(){
-        RTC.createRoom({
-            roomid : opts.roomid * 1,
-            privateMapKey: opts.privateMapKey,
-            role : "user",
-            pstnBizType: parseInt($("#pstnBizType").val() || 0),
-            pstnPhoneNumber:  $("#pstnPhoneNumber").val()
-        },function(){
-            RTC.getStats({
-                userId:0, //不传或者设置为0 ，为获取当前本端数据
-                interval: 2000 //2秒获取数据
-            },function(result){
-                console.debug( result );
-                //推流端数据
-                var data = {
-                    bandwidth: bytesToSize(result.bandwidth.speed),
-                    send: bytesToSize(result.audio.bytesSent + result.video.bytesSent),
-                    width: result.resolutions.send.width,
-                    height: result.resolutions.send.height,
-                    audioPacketsSent: result.audio.packetsSent || 0,
-                    videoPacketsSent: result.video.packetsSent || 0,
-                    videoPacketsLost: result.video.packetsLost
-                };
-                console.debug( ' send ' ,data)
+        RTC.startRTC();
 
-                //test 代码
-                //10秒后停止数据统计
-                setTimeout(function(){
-                    result.nomore();
-                },5000);
+        RTC.getStats({
+            userId:0, //不传或者设置为0 ，为获取当前本端数据
+            interval: 2000 //2秒获取数据
+        },function(result){
+            console.debug( result );
+            //推流端数据
+            var data = {
+                bandwidth: bytesToSize(result.bandwidth.speed),
+                send: bytesToSize(result.audio.bytesSent + result.video.bytesSent),
+                width: result.resolutions.send.width,
+                height: result.resolutions.send.height,
+                delay: result.audio.delay || 0,
+                audioPacketsSent: result.audio.packetsSent || 0,
+                videoPacketsSent: result.video.packetsSent || 0,
+                videoPacketsLost: result.video.packetsLost
+            };
+            console.debug( ' send ' ,data)
 
-            });
-        });;
-    },function( error ){
-        console.error("init error", error)
+            //test 代码
+            //10秒后停止数据统计
+            setTimeout(function(){
+                result.nomore();
+            },5000);
+
+        });
     });
 
     // 远端流新增/更新
