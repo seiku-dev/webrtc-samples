@@ -448,7 +448,8 @@ function startBrowserTest(){
                 if( isMobile.safari() && isMobile.iOS()  ){
                     //ios 11 版本 11.0.3 以下不支持
                     var matches = (navigator.userAgent).match(/OS (\d+)_(\d+)_?(\d+)?/);
-                    if(matches && matches[1]>=11 && (matches[2]>=1 || matches[3] >= 3) ){
+                    console.debug('matches',matches)
+                    if(matches && matches[1]>=11){
                         $("#browser-title").css("background", "#90dc90");
                         titleText =  matches[0] + " 当前浏览器支持 !!!";
                     }else{
