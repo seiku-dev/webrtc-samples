@@ -167,6 +167,7 @@ function initRTC(opts) {
         roomid : opts.roomid * 1,
         privMap: 255
     },function(){
+        if(opts && opts.closeLocalMedia ) return;
         gotStream({
             audio:true,
             video:true

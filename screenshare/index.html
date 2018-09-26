@@ -45,18 +45,13 @@
       </div><button class="btn btn-default"
            onclick="detect()"
            type="button">屏幕分享插件检测</button><br>
-      <h5>分享源</h5><label for=""><input checked
-             id="screen"
+      <h5>分享源</h5><label for=""><input checked id="screen" type="checkbox" value="screen">
+        <span>screen</span></label>
+        <label for="">
+          <input checked id="window" type="checkbox" value="window"> <span>window</span></label> <label for=""><input id="audio"
              type="checkbox"
-             value="screen"> <span>screen</span></label> <label for=""><input checked
-             id="window"
-             type="checkbox"
-             value="window"> <span>window</span></label> <label for=""><input id="audio"
-             type="checkbox"
-             value="audio"> <span>audio</span></label> <label for=""><input checked
-             id="tab"
-             type="checkbox"
-             value="tab"> <span>tab</span></label> <button class="btn btn-default"
+             value="audio"> <span>audio</span></label> 
+             <label for=""><input checked id="tab" type="checkbox" value="tab"> <span>tab</span></label> <button class="btn btn-default"
            onclick="start('screen')"
            type="button">屏幕分享</button><br>
       <button class="btn btn-default"
