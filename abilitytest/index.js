@@ -144,7 +144,7 @@ var intervalID = 0;
 var intervalStep = 1;
 var text = {
     Mic : "音频输入",
-    MicTest : "音频输入设备检测",
+    MicTest : "音频输入检测（请对着麦克风说话）",
     Camera : "视频输入",
     CameraTest : "视频输入检测",
     Support : "分辨率",
@@ -166,8 +166,6 @@ function onAudioTestDone(result) {
     if (result == 0) {
         $("#mic-title").css("background", "#90dc90");
         titleText = text.MicTest + " 成功 !!!";
-
-        audioInputTest()
     } else {
         $("#mic-title").css("background", "#dc9090");
         titleText = text.MicTest + " 失败 !!!";
@@ -290,7 +288,7 @@ function startSupportTest() {
         // [160, 120], [320, 180], [320, 240], [640, 360], [640, 480], [768, 576],
         // [1024, 576], [1280, 720], [1280, 768], [1280, 800], [1920, 1080],
         // [1920, 1200], [3840, 2160], [4096, 2160]
-          [1280,720],[960,540], [640,360], [640,480], [480,264], [320,180]
+          [1280,720], [640,360], [640,480], [480,264], [320,180]
     ];
 
 
@@ -298,35 +296,9 @@ function startSupportTest() {
     var supTest = new CameraTest(supportTest, resolutionArray);
     supTest.run();
 }
-
-var FetchSigCgi = 'https://www.qcloudtrtc.com/sxb_dev/?svc=doll&cmd=fetchsig';
-function getUserSig( callback ){
-    
-    $.ajax({
-        type: "POST",
-        url: FetchSigCgi,
-        dataType: 'json',
-        data:JSON.stringify({
-            appid: 1400027849,
-            id : "neallin"
-        }),
-        success: function (json) {
-            if(json && json.errorCode === 0 ){
-                //一会儿进入房间要用到
-                var url = "wss://webrtc.qq.com:8687/?userSig="+json.data.userSig+"&sdkAppid=1400027849&identifier=neallin";
-                callback(url );
-            }else{
-                console.error(json);
-            }
-        },
-        error: function (err){
-            console.error(err);
-        }
-    })
-}
-
 var websocket = null;
 function getRelayIp(callback ,error){
+    var url = "wss://webrtc.qq.com:8687/?userSig=eJxlj8tOwzAQRff5CivbImo7cXCRWDSVqQpFtBQWZGOlsUMmrxrXNCDEv1NCJSJxt*fMXN1PDyHkPy4352mW7d5aJ92H0T66RD72z-6gMaBk6mRg1T*o3w1YLdPcadtDwhijGA8dULp1kMPJaHVa19AOhL2qZN-y*yE8ntMLHk6GCrz08E48zRbiUDR8-gpiZGgYrO83olEhr4u85EYQawJKr5O44-MxnYKYdjOe0eVDZXT8TEaLpFRbtSqCKmKT8TaJ4lsR4tVNUbKouxpUOmj0aRLmhLKIkQE9aLuHXdsLFBNGaIB-4ntf3jcuhluu&sdkAppid=1400027849&identifier=neallin";
     if (websocket) {
         try {
             websocket.close();
@@ -335,15 +307,12 @@ function getRelayIp(callback ,error){
             console.error(e);
         }
     }
-    getUserSig( function(url){
-        
-        websocket = new WebSocket(url);
+    websocket = new WebSocket(url);
 
-        websocket.onmessage = callback;
-        websocket.onopen = wsonopen;
-        websocket.onerror = error;
-        websocket.onclose = wsonclose;
-    })
+    websocket.onmessage = callback;
+    websocket.onopen = wsonopen;
+    websocket.onerror = error;
+    websocket.onclose = wsonclose;
 }
 // getRelayIp();
 function wsonopen(data){
@@ -359,24 +328,6 @@ function wsonclose(data){
 }
 function wsonclose(data){
     console.debug(data);
-}
-
-
-function checkH264Support( callback ){
-    var peer = new RTCPeerConnection(null);
-    peer.createOffer({
-    offerToReceiveAudio: 1,
-    offerToReceiveVideo: 1
-    }).then(function(data){
-        if( data.sdp.toLowerCase().indexOf("h264") === -1 ){
-            callback( false )
-        }else{
-            callback( true )
-        }
-        peer.close();
-    },function(data){
-        callback( false )
-    });
 }
 
 function startConnectionTest() {
@@ -430,9 +381,12 @@ function startBrowserTest(){
 
     $("#browser-detail")[0].innerText = navigator.userAgent;
     var isMobileBrowser = false;
+
     for(var a in isMobile){
         if( isMobile[a]() ){
             isMobileBrowser = true
+            console.debug(a)
+            console.debug(isMobile[a]())
             titleText = a + ":";
             var version = checkTBSVersion(navigator.userAgent);
             if( a === 'Android' && version && version < 43600 ){
@@ -445,15 +399,15 @@ function startBrowserTest(){
                 onVideoTestDone(-1);
                 onSupportTestDone(-1);
             }else{
-                if( isMobile.safari() && isMobile.iOS()  ){
+                if( isMobile.iOS()  ){
                     //ios 11 版本 11.0.3 以下不支持
                     var matches = (navigator.userAgent).match(/OS (\d+)_(\d+)_?(\d+)?/);
-                    if(matches && matches[1]>=11 && (matches[2]>=1 || matches[3] >= 3) ){
+                    if(matches && matches[1]>=11 && matches[3] >= 3){
                         $("#browser-title").css("background", "#90dc90");
-                        titleText =  matches[0] + " 当前浏览器支持 !!!";
+                        titleText =  a + " 当前浏览器支持 !!!";
                     }else{
                         $("#browser-title").css("background", "#dc9090");
-                        titleText =  matches[0] + "  不支持 !!!";
+                        titleText =  "IOS (version:"+ matches[1] + ") 不支持 !!!";
                     }
                 }else{
                     $("#browser-title").css("background", "#90dc90");
@@ -465,27 +419,18 @@ function startBrowserTest(){
         }
     }
 
-    checkH264Support(function(support){
-        titleText = "当前浏览器 不支持 !!!"
-        if( !support ){
-            isWebRTCSupported = false
-            titleText +="(不支持H264)"
-        }
-        if( !isMobileBrowser){
-            if(isWebRTCSupported){
-                titleText =  "当前浏览器 支持 !!!";
-                $("#browser-title").css("background", "#90dc90");
-                $("#browser-title")[0].innerText = titleText;
-            }else{
-    
-                
-                $("#browser-title").css("background", "#dc9090");
-                $("#browser-title")[0].innerText = titleText;
-            }
-        }
-    });
+    if( !isMobileBrowser){
+        if(isWebRTCSupported){
+            titleText =  "当前浏览器 支持 !!!";
+            $("#browser-title").css("background", "#90dc90");
+            $("#browser-title")[0].innerText = titleText;
+        }else{
 
-    
+            titleText = "当前浏览器 不支持 !!!";
+            $("#browser-title").css("background", "#dc9090");
+            $("#browser-title")[0].innerText = titleText;
+        }
+    }
 }
 
 

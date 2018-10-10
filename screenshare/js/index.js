@@ -175,8 +175,8 @@ function getMediaStream( type ,callback ){
             screen: true,
             screenSources: screenSources.join(","),
             attributes:{
-                width:320,
-                height:320,
+                // width:320,  //不指定高宽，会获取分享源的高宽进行分享
+                // height:320, //不指定高宽，会获取分享源的高宽进行分享
                 frameRate:10
             }
         },function(info){

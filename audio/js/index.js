@@ -111,7 +111,23 @@ function addComputer() {
         })
     })
 }
-
+function soundMeter( info ){
+    
+    console.debug(' meter start')
+    // 分析音频流
+    var meter = WebRTCAPI.SoundMeter({
+        stream: info.stream,
+        onprocess: function( data ){
+            $("#volume").val( data.volume)
+            $("#volume_str").text( "volume: "+ data.volume)
+            $("#status").text( data.status )
+        }
+    })
+    setTimeout( function(){
+        console.debug(' meter stop')
+        meter.stop();
+     },10000);
+}
 function onLocalStreamAdd(info) {
     if (info.stream && info.stream.active === true)
     {
@@ -122,19 +138,7 @@ function onLocalStreamAdd(info) {
         }
         audio.srcObject = info.stream;
     }
-    // 分析音频流
-    var meter = WebRTCAPI.SoundMeter({
-        stream: info.stream,
-        onprocess: function( data ){
-            $("#volume").val( data.volume)
-            $("#volume_str").text( "volume: "+ data.volume)
-            $("#status").text( data.status )
-        }
-    })
-
-    // 停止分析音频流
-    // meter.stop();
-
+    soundMeter( info );
 }
 
 

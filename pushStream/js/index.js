@@ -236,7 +236,7 @@ function initRTC(opts) {
 
     //流通知
     RTC.on("onStreamNotify", function (info) {
-        console.error('onStreamNotify', info)
+        console.info('onStreamNotify', info)
         if( info.isLocal ){
             //本地流的变化通知
             onLocalStreamHandle( info );
