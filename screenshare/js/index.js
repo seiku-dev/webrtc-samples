@@ -177,7 +177,7 @@ function getMediaStream( type ,callback ){
             attributes:{
                 // width:320,  //不指定高宽，会获取分享源的高宽进行分享
                 // height:320, //不指定高宽，会获取分享源的高宽进行分享
-                frameRate:10
+                frameRate:15
             }
         },function(info){
             streams['screen'] = info.stream
