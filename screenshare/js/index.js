@@ -34,7 +34,7 @@ function onRelayTimeout(msg) {
 
 function createVideoElement(id, isLocal) {
     var videoDiv = document.createElement("div");
-    videoDiv.innerHTML = '<video id="' + id + '" autoplay ' + (isLocal ? 'muted' : '') + ' playsinline ></video>';
+    videoDiv.innerHTML = '<video id="' + id + '" autoplay ' + (isLocal ? 'muted' : '') + ' playsinline controls ></video>';
     document.querySelector("#remote-video-wrap").appendChild(videoDiv);
 
     return document.getElementById(id);
@@ -52,7 +52,8 @@ function onLocalStreamAdd(info) {
         video.muted = true
         video.autoplay = true
         video.playsinline = true
-
+        video.controls = true;
+        video.play();
     }
 }
 
@@ -66,6 +67,11 @@ function onRemoteStreamUpdate(info) {
             video = createVideoElement(id);
         }
         video.srcObject = info.stream;
+        video.playsinline = true
+        video.muted = true
+        video.controls = true;
+        video.play();
+        video.muted = false
     } else {
         console.log('欢迎用户' + info.userId + '加入房间');
     }
@@ -97,6 +103,9 @@ function initRTC(opts) {
     })
     //初始化
     window.RTC = new WebRTCAPI({
+        debug:{
+            log:true
+        },
         userId: opts.userId,
         userSig: opts.userSig,
         sdkAppId: opts.sdkappid,
@@ -177,7 +186,7 @@ function getMediaStream( type ,callback ){
             attributes:{
                 // width:320,  //不指定高宽，会获取分享源的高宽进行分享
                 // height:320, //不指定高宽，会获取分享源的高宽进行分享
-                frameRate:15
+                frameRate:10
             }
         },function(info){
             streams['screen'] = info.stream
