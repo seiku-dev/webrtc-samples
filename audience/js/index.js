@@ -154,7 +154,6 @@ function initRTC(opts) {
     
     // 初始化
     window.RTC = new WebRTCAPI({
-        useCloud:useCloud,
         "debug":{
             log:true
         },
