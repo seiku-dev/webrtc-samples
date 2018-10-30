@@ -103,6 +103,7 @@ function initRTC(opts) {
     })
     //初始化
     window.RTC = new WebRTCAPI({
+        useCloud:useCloud,
         debug:{
             log:true
         },
@@ -242,6 +243,51 @@ function start( name ){
 }
 
 
+Bom = {
+	/**
+	 * @description 读取location.search
+	 *
+	 * @param {String} n 名称
+	 * @return {String} search值
+	 * @example
+	 * 		$.bom.query('mod');
+	 */
+	query:function(n){ 
+		var m = window.location.search.match(new RegExp( "(\\?|&)"+n+"=([^&]*)(&|$)"));   
+		return !m ? "":decodeURIComponent(m[2]);  
+	},
+	getHash:function(n){
+		var m = window.location.hash.match(new RegExp( "(#|&)"+n+"=([^&]*)(&|$)"));
+		return !m ? "":decodeURIComponent(m[2]);  
+	}
+};
+
+$("#userId").val("video_" + parseInt(Math.random() * 100000000));
+var phonenum = Bom.query("phonenum")
+var pstntype = Bom.query("pstntype")
+var roomid = Bom.query("roomid")
+var sdkappid = Bom.query("sdkappid")
+var userId = Bom.query("userId")
+var useCloud = Bom.query("useCloud") ? parseInt(Bom.query("useCloud")) : 1;
+var privmap = Bom.query("privmap") ? parseInt(Bom.query("privmap")) : 255;
+console.error('useCloud',useCloud)
+if( phonenum ){
+    $("#phonenum").val( phonenum)
+}
+if( pstntype ){
+    $("#pstnBizType").val( pstntype )
+}
+if( roomid ){
+    $("#roomid").val( roomid )
+}
+if( sdkappid ){
+    $("#sdkappid").val( sdkappid )
+}
+if( userId ){
+    $("#userId").val( userId )
+}if( privmap ){
+    $("#privmap").val( privmap )
+}
 function startRTC( name ){
     if( !streams[name] && name !=='audience' ) return;
     var stream = streams[name];
