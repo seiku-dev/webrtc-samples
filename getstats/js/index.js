@@ -87,6 +87,7 @@ function onRemoteStreamUpdate( info ) {
             videoPacketsLost: result.video.packetsLost,
         }
         console.debug( ' recv ', data)
+        console.debug( ' recv ', result )
         console.debug( JSON.stringify( result ))
         //test 代码
         //10秒后停止数据统计
@@ -133,7 +134,7 @@ function initRTC(opts){
             userId:0, //不传或者设置为0 ，为获取当前本端数据
             interval: 2000 //2秒获取数据
         },function(result){
-            console.debug( result );
+            // console.debug( result );
             //推流端数据
             var data = {
                 bandwidth: bytesToSize(result.bandwidth.speed),
@@ -145,7 +146,7 @@ function initRTC(opts){
                 videoPacketsSent: result.video.packetsSent || 0,
                 videoPacketsLost: result.video.packetsLost
             };
-            console.debug( ' send ' ,data)
+            // console.debug( ' send ' ,data)
 
             //test 代码
             //10秒后停止数据统计
