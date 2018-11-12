@@ -87,11 +87,12 @@ function onRemoteStreamUpdate( info ) {
             videoPacketsLost: result.video.packetsLost,
         }
         console.debug( ' recv ', data)
+        console.debug( JSON.stringify( resut ))
         //test 代码
         //10秒后停止数据统计
         setTimeout(function(){
             result.nomore();
-        },5000);
+        },20000);
     });
 }
 
@@ -150,7 +151,7 @@ function initRTC(opts){
             //10秒后停止数据统计
             setTimeout(function(){
                 result.nomore();
-            },5000);
+            },20000);
 
         });
     });
