@@ -243,20 +243,11 @@ function switchVideoDevice() {
 
     if( isSafari ){
         //采集音视频流
-        RTC.getLocalStream({
-            video:true,
-            audio:true,
-            videoDevice: {
-                facingMode: {
-                    ideal: videoIndex === 0 ? 'user': 'environment'
-                }
+        RTC.chooseVideoDevice( {
+            facingMode: {
+                ideal: videoIndex === 0 ? 'user': 'environment'
             }
-        },function(info){
-            //更新音视频流
-            RTC.updateStream( {
-                stream: info.stream
-            })
-        });
+        } );
     }else{
         console.debug('switchVideoDevice',videoIndex, videoDevices[videoIndex])
         RTC.chooseVideoDevice( videoDevices[videoIndex] );
