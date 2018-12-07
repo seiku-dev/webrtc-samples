@@ -110,9 +110,9 @@ function gotStream( opt ,succ){
 function initRTC(opts){
     // 初始化
     window.RTC = new WebRTCAPI({
-        "debug":{
-            log:true
-        },
+        // "debug":{
+        //     log:true
+        // },
         "userId": opts.userId,
         "userSig": opts.userSig,
         "sdkAppId": opts.sdkappid,
