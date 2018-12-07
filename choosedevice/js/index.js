@@ -41,6 +41,12 @@ function createVideoElement( id, isLocal ){
     return document.getElementById(id);
 }
 
+//是否safari
+var isSafari = false;
+WebRTCAPI.detectRTC({screenshare: false}, function(data){
+    isSafari = data.isSafari;
+})
+
 
 function onLocalStreamAdd(info) {
     if (info.stream && info.stream.active === true)
@@ -118,8 +124,17 @@ function initRTC(opts){
         roomid : opts.roomid * 1,
         privMap: 255
     },function(){
+        if(isSafari){
+            var videoDevice = {
+                facingMode:{
+                    ideal:'user'
+                }
+            };
+        }else{
+            var videoDevice = videoDevices[0];
+        }
         gotStream({
-            videoDevice: videoDevices[0]
+            videoDevice: videoDevice
         },function(stream){
             RTC.startRTC({
                 stream: stream,
@@ -225,8 +240,27 @@ function listDevices(){
 function switchVideoDevice() {
     videoIndex ++;
     if(videoIndex == videoDevices.length )videoIndex = 0;
-    console.debug('switchVideoDevice',videoIndex, videoDevices[videoIndex])
-    RTC.chooseVideoDevice( videoDevices[videoIndex] );
+
+    if( isSafari ){
+        //采集音视频流
+        RTC.getLocalStream({
+            video:true,
+            audio:true,
+            videoDevice: {
+                facingMode: {
+                    ideal: videoIndex === 0 ? 'user': 'environment'
+                }
+            }
+        },function(info){
+            //更新音视频流
+            RTC.updateStream( {
+                stream: info.stream
+            })
+        });
+    }else{
+        console.debug('switchVideoDevice',videoIndex, videoDevices[videoIndex])
+        RTC.chooseVideoDevice( videoDevices[videoIndex] );
+    }
 }
 
 function switchAudioDevice(){
