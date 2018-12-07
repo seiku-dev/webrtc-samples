@@ -244,9 +244,8 @@ function switchVideoDevice() {
     if( isSafari ){
         //采集音视频流
         RTC.chooseVideoDevice( {
-            facingMode: {
-                ideal: videoIndex === 0 ? 'user': 'environment'
-            }
+            facingMode: videoIndex === 0 ? 'user': 'environment'
+            
         } );
     }else{
         console.debug('switchVideoDevice',videoIndex, videoDevices[videoIndex])
