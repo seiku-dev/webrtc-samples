@@ -71,6 +71,10 @@ function onRemoteStreamUpdate(info) {
         }
         setTimeout(function(){
             video.srcObject = info.stream;
+            video.muted = true
+            video.autoplay = true
+            video.playsinline = true
+            video.play();
         },50)        
     } else {
         // console.log('欢迎用户' + info.userId + '加入房间');
@@ -142,7 +146,15 @@ function gotStream( opt ,succ){
     RTC.getLocalStream({
         video:true,
         audio:true,
-        videoDevice:opt.videoDevice
+        videoDevice:opt.videoDevice,
+        // 如需指定分辨率，可以在attributes中增加对width和height的约束
+        // 否则将获取摄像头的默认分辨率
+        // 更多配置项 请参考 接口API
+        // https://cloud.tencent.com/document/product/647/17251#webrtcapi.getlocalstream
+        // attributes:{
+        //     width:640,
+        //     height:320
+        // }
     },function(info){
         var stream = info.stream;
         succ ( stream )
@@ -154,6 +166,7 @@ function initRTC(opts) {
     
     // 初始化
     window.RTC = new WebRTCAPI({
+        "useCloud": useCloud,
         "debug":{
             log:true
         },
@@ -167,6 +180,7 @@ function initRTC(opts) {
         roomid : opts.roomid * 1,
         privMap: 255
     },function(){
+        if(opts && opts.closeLocalMedia ) return;
         gotStream({
             audio:true,
             video:true
@@ -206,11 +220,6 @@ function initRTC(opts) {
     });
     RTC.on("onUserDefinedWebRTCEventNotice", function (info) {
         // console.error( 'onUserDefinedWebRTCEventNotice',info )
-    });
-
-    RTC.on('onQualityReport', function(data) {
-        //数据上报
-        console.debug( data )
     });
 }
 
