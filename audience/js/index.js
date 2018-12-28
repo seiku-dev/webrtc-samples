@@ -61,9 +61,9 @@ function onLocalStreamAdd(info) {
 
 function onRemoteStreamUpdate(info) {
 
-    console.debug( info )
     // console.debug(info)
     if (info.stream && info.stream.active === true) {
+        console.error( 'info',info )
         var id = info.videoId;
         var video = document.getElementById(id);
         if (!video) {
@@ -71,11 +71,11 @@ function onRemoteStreamUpdate(info) {
         }
         setTimeout(function(){
             video.srcObject = info.stream;
-            video.muted = true
+            video.muted = false
             video.autoplay = true
             video.playsinline = true
             video.play();
-        },50)        
+        },50)
     } else {
         // console.log('欢迎用户' + info.userId + '加入房间');
     }
@@ -145,7 +145,9 @@ if( userId ){
 function gotStream( opt ,succ){
     RTC.getLocalStream({
         video:true,
-        audio:true,
+        audio:{
+            channelCount:2
+        },
         videoDevice:opt.videoDevice,
         // 如需指定分辨率，可以在attributes中增加对width和height的约束
         // 否则将获取摄像头的默认分辨率
