@@ -145,9 +145,7 @@ if( userId ){
 function gotStream( opt ,succ){
     RTC.getLocalStream({
         video:true,
-        audio:{
-            channelCount:2
-        },
+        audio:true,
         videoDevice:opt.videoDevice,
         // 如需指定分辨率，可以在attributes中增加对width和height的约束
         // 否则将获取摄像头的默认分辨率
