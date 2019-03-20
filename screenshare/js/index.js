@@ -198,6 +198,8 @@ function getMediaStream( type ,callback ){
         });
     }else if( type === 'camera' ){
         RTC.getLocalStream({
+            audio:true,
+            video:true,
             attributes:{
                 width:640,
                 height:320,
