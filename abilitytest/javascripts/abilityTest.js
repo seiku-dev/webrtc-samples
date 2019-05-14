@@ -1197,7 +1197,8 @@ function ConnectionTest(test , stun) {
         bundlePolicy: "max-bundle",
         rtcpMuxPolicy: "require",
         tcpCandidatePolicy: "disable",
-        IceTransportsType: "nohost"
+        IceTransportsType: "nohost",
+        sdpSemantics: 'plan-b'
     };
 
     this.optional = {
