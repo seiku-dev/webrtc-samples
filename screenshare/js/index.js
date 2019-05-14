@@ -183,6 +183,7 @@ function getMediaStream( type ,callback ){
         */
         RTC.getLocalStream({
             screen: true,
+            audio:true,
             screenSources: screenSources.join(","),
             attributes:{
                 // width:320,  //不指定高宽，会获取分享源的高宽进行分享

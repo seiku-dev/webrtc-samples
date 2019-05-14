@@ -259,14 +259,34 @@ function switchVideoDevice() {
         });
     }else{
         console.debug('switchVideoDevice',videoIndex, videoDevices[videoIndex])
-        RTC.chooseVideoDevice( videoDevices[videoIndex] );
+        RTC.getLocalStream({
+            video: true,
+            audio:true,
+            videoDevice: videoDevices[videoIndex]
+        }, function(info){
+            RTC.updateStream({
+                role: 'user', // or other role 
+                stream: info.stream
+            })
+        })
     }
 }
 
 function switchAudioDevice(){
     audioIndex ++;
     if( audioIndex ==  audioDevices.length ) audioIndex = 0;
-    RTC.chooseAudioDevice( audioDevices[audioIndex] );
+    RTC.getLocalStream({
+        audio: true,
+        video: true,
+        attributes: {
+            audioDevice: audioDevices[audioIndex]
+        }
+    }, function(info){
+        RTC.updateStream({
+            role: 'user', // or other role 
+            stream: info.stream
+        })
+    })
 }
 
 function switchSpeakerDevice(){

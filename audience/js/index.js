@@ -61,9 +61,9 @@ function onLocalStreamAdd(info) {
 
 function onRemoteStreamUpdate(info) {
 
+    console.debug( info )
     // console.debug(info)
     if (info.stream && info.stream.active === true) {
-        console.error( 'info',info )
         var id = info.videoId;
         var video = document.getElementById(id);
         if (!video) {
@@ -71,11 +71,11 @@ function onRemoteStreamUpdate(info) {
         }
         setTimeout(function(){
             video.srcObject = info.stream;
-            video.muted = false
+            video.muted = true
             video.autoplay = true
             video.playsinline = true
             video.play();
-        },50)
+        },50)        
     } else {
         // console.log('欢迎用户' + info.userId + '加入房间');
     }
@@ -165,19 +165,22 @@ function gotStream( opt ,succ){
 function initRTC(opts) {
     
     // 初始化
-    window.RTC = new WebRTCAPI({
-        "useCloud": useCloud,
-        "debug":{
-            log:true
-        },
-        "userId": opts.userId,
-        "userSig": opts.userSig,
-        "sdkAppId": opts.sdkappid
-    });
+    if(  !window.RTC ){
+
+        window.RTC = new WebRTCAPI({
+            "useCloud": useCloud,
+            "debug":{
+                log:true
+            },
+            "userId": opts.userId,
+            "userSig": opts.userSig,
+            "sdkAppId": opts.sdkappid
+        });
+    }
     
     
-    RTC.createRoom({
-        roomid : opts.roomid * 1,
+    RTC.enterRoom({
+         roomid : opts.roomid * 1,
         privMap: 255
     },function(){
         if(opts && opts.closeLocalMedia ) return;
@@ -190,6 +193,8 @@ function initRTC(opts) {
                 role: 'user'
             });
         })
+    },function(err){
+        console.error('enterRoomError', err)
     });
 
     // 远端流新增/更新
@@ -213,7 +218,7 @@ function initRTC(opts) {
         }
     });
     RTC.on("onStreamNotify", function (info) {
-        // console.warn('onStreamNotify', info)
+        console.warn('onStreamNotify', info)
     });
     RTC.on("onWebSocketNotify", function (info) {
         // console.warn('onWebSocketNotify', info)

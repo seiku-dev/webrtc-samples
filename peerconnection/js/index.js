@@ -98,24 +98,22 @@ function onWebSocketClose() {
 
 function initRTC(opts) {
     window.RTC = new WebRTCAPI({
-        useCloud: 1, //是否使用云上环境
         userId: opts.userId,
         userSig: opts.userSig,
         sdkAppId: opts.sdkappid,
         accountType: opts.accountType,        
         peerAddNotify: true //peer connection 通知
-    }, function () {
-        RTC.createRoom({
-            roomid: opts.roomid * 1,
-            privateMapKey: opts.privateMapKey,
-            role: "user"
-        }, function (info) {
-            console.warn("init succ", info)
-        }, function (error) {
-            console.error("init error", error)
-        });
+    });
+    
+    RTC.createRoom({
+        roomid: opts.roomid * 1,
+        privateMapKey: opts.privateMapKey,
+        role: "user"
+    }, function (info) {
+        console.warn("init succ", info)
+        RTC.startRTC();
     }, function (error) {
-        console.warn("init error", error)
+        console.error("init error", error)
     });
 
     // P2P连接通知
@@ -169,7 +167,9 @@ function stopWs() {
 }
 
 function startRTC() {
-    RTC.startRTC(0, function (info) {
+    RTC.startRTC({
+        
+    }, function (info) {
         console.debug(info)
     }, function (info) {
         console.debug(info)
