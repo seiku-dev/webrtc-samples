@@ -146,15 +146,16 @@ function gotStream( opt ,succ){
     RTC.getLocalStream({
         video:true,
         audio:true,
-        videoDevice:opt.videoDevice,
+        // videoDevice:opt.videoDevice,
         // 如需指定分辨率，可以在attributes中增加对width和height的约束
         // 否则将获取摄像头的默认分辨率
         // 更多配置项 请参考 接口API
         // https://cloud.tencent.com/document/product/647/17251#webrtcapi.getlocalstream
-        // attributes:{
-        //     width:640,
-        //     height:320
-        // }
+        attributes:{
+            width:960,
+            height:540,
+            frameRate:20
+        }
     },function(info){
         var stream = info.stream;
         succ ( stream )
