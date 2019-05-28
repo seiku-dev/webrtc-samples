@@ -71,10 +71,6 @@ function onRemoteStreamUpdate(info) {
         }
         setTimeout(function(){
             video.srcObject = info.stream;
-            video.muted = true
-            video.autoplay = true
-            video.playsinline = true
-            video.play();
         },50)        
     } else {
         // console.log('欢迎用户' + info.userId + '加入房间');
