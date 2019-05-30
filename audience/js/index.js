@@ -147,11 +147,11 @@ function gotStream( opt ,succ){
         // 否则将获取摄像头的默认分辨率
         // 更多配置项 请参考 接口API
         // https://cloud.tencent.com/document/product/647/17251#webrtcapi.getlocalstream
-        attributes:{
-            width:960,
-            height:540,
-            frameRate:20
-        }
+        // attributes:{
+        //     width:960,
+        //     height:540,
+        //     frameRate:20
+        // }
     },function(info){
         var stream = info.stream;
         succ ( stream )
