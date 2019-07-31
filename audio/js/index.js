@@ -16,55 +16,9 @@ var FetchSigCgi = 'https://www.qcloudtrtc.com/sxb_dev/?svc=account&cmd=authPrivM
 var sdkappid,
     accountType = 14418, // accounttype 还是在文档中会找到
     userSig,
-    userId;
+    username;
 
 
-Bom = {
-	/**
-	 * @description 读取location.search
-	 *
-	 * @param {String} n 名称
-	 * @return {String} search值
-	 * @example
-	 * 		$.bom.query('mod');
-	 */
-	query:function(n){ 
-		var m = window.location.search.match(new RegExp( "(\\?|&)"+n+"=([^&]*)(&|$)"));   
-		return !m ? "":decodeURIComponent(m[2]);  
-	},
-	getHash:function(n){
-		var m = window.location.hash.match(new RegExp( "(#|&)"+n+"=([^&]*)(&|$)"));
-		return !m ? "":decodeURIComponent(m[2]);  
-	}
-};
-
-$("#userId").val("video_" + parseInt(Math.random() * 100000000));
-var phonenum = Bom.query("phonenum")
-var pstntype = Bom.query("pstntype")
-var roomid = Bom.query("roomid")
-var sdkappid = Bom.query("sdkappid")
-var userId = Bom.query("userId")
-var useCloud = Bom.query("useCloud") ? parseInt(Bom.query("useCloud")) : 1;
-var privmap = Bom.query("privmap") ? parseInt(Bom.query("privmap")) : 255;
-console.error('useCloud',useCloud)
-if( phonenum ){
-    $("#phonenum").val( phonenum)
-}
-if( pstntype ){
-    $("#pstnBizType").val( pstntype )
-}
-if( roomid ){
-    $("#roomid").val( roomid )
-}
-if( sdkappid ){
-    $("#sdkappid").val( sdkappid )
-}
-if( userId ){
-    $("#userId").val( userId )
-}
-if( privmap ){
-    $("#privmap").val( privmap )
-}
 function onKickout() {
     alert("on kick out!");
 }
@@ -268,9 +222,10 @@ function initRTC(opts){
     // just for debugging
     RTC.on("*",function(e){ console.debug(e); });
 }
+$("#username").val("audio_"+ parseInt(Math.random()*100000000));
 function login(){
     sdkappid = $("#sdkappid").val();
-    userId = $("#userId").val();
+    username = $("#username").val();
     //请使用英文半角/数字作为用户名
     $.ajax({
         type: "POST",
@@ -281,7 +236,7 @@ function login(){
             appid: parseInt(sdkappid),
             roomnum:parseInt($("#roomid").val()),
             privMap:255,
-            identifier : userId,
+            identifier : username,
             accounttype: accountType
         }),
         success: function (json) {
@@ -294,7 +249,7 @@ function login(){
                 $("#input-container").hide();
 
                 initRTC({
-                    "userId": userId,
+                    "userId": username,
                     "userSig": userSig,
                     "privMapEncrypt": privateMapKey,
                     "sdkappid": sdkappid,

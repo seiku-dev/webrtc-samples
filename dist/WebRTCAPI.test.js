@@ -5889,13 +5889,14 @@ WebRTCAPI.fn.connect = function (succ, fail) {
         break;
     }
 
+    console.error('emit => onWebSocketClose', e);
+    emitter.emit('onWebSocketClose', e);
+
     global.rtcReport.reportSSO({
       reportType: 'WSClose',
       errorCode: '' + e.code,
       errorMsg: e.reason
     });
-
-    emitter.emit('onWebSocketClose', e);
   };
 
   var wsonerror = function wsonerror(e) {
@@ -11832,9 +11833,7 @@ MediaUtil.fn.packConstraints = function (constraints, opts, ext) {
             new_constraints = {
                 "audio": global.config.audioActive,
                 "video": {
-                    deviceId: {
-                        exact: new_constraints.video.deviceId
-                    }
+                    deviceId: new_constraints.video.deviceId
                 }
             };
         } else {
@@ -11844,32 +11843,17 @@ MediaUtil.fn.packConstraints = function (constraints, opts, ext) {
             };
         }
 
-        if (opts && opts.videoDevice) {
-            if (new_constraints.video && (new_constraints.video instanceof Boolean || new_constraints.video === true)) {
+        if (opts && opts.videoDevice && opts.videoDevice.facingMode) {
+            if (new_constraints.video && new_constraints.video instanceof Boolean) {
                 new_constraints.video = {};
             }
-            if (opts.videoDevice.facingMode) {
-                if (_typeof(new_constraints.video) === 'object') {
-                    new_constraints.video.facingMode = opts.videoDevice.facingMode;
-                } else {
-                    new_constraints.video.facingMode = opts.videoDevice.facingMode;
-                    new_constraints.video = {
-                        facingMode: opts.videoDevice.facingMode
-                    };
-                }
+            if (_typeof(new_constraints.video) === 'object') {
+                new_constraints.video.facingMode = opts.videoDevice.facingMode;
             } else {
-                if (_typeof(new_constraints.video) === 'object') {
-                    new_constraints.video.deviceId = {
-                        exact: opts.videoDevice.deviceId
-                    };
-                } else {
-                    new_constraints.video.deviceId = opts.videoDevice.deviceId;
-                    new_constraints.video = {
-                        deviceId: {
-                            exact: opts.videoDevice.deviceId
-                        }
-                    };
-                }
+                new_constraints.video.facingMode = opts.videoDevice.facingMode;
+                new_constraints.video = {
+                    facingMode: opts.videoDevice.facingMode
+                };
             }
         }
     } else {

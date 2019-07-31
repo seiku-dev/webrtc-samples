@@ -40,9 +40,13 @@
 
   <!-- RTC  -->
   <div id="video-section" style="display: none">
-    <button class="btn btn-default" type="button" onclick="quitRTC()">退房</button>
-    <button class="btn btn-default" type="button" onclick="stopRTC()">停止推流</button>
-    <button class="btn btn-default" type="button" onclick="startRTC()">开始推流</button>
+    <button class="btn btn-default" type="button" id="quit" onclick="quitRTC()">退房</button>
+    <button class="btn btn-default" type="button" id="stop" onclick="stopRTC()">停止推流</button>
+    <button class="btn btn-default" type="button" id="start" onclick="startRTC()">开始推流</button>
+    <button class="btn btn-default" type="button" id="muteAudio" onclick="RTC.closeAudio()">MuteAudio</button>
+    <button class="btn btn-default" type="button" id="unmuteAudio" onclick="RTC.openAudio()">unmuteAudio</button>
+    <button class="btn btn-default" type="button" id="muteVideo" onclick="RTC.closeVideo()">muteVideo</button>
+    <button class="btn btn-default" type="button" id="unmuteVideo" onclick="RTC.openVideo()">unmuteVideo</button>
         <div id="remote-video-wrap">
 
         </div>

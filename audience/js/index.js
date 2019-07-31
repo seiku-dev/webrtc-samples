@@ -24,7 +24,9 @@ function onKickout() {
 }
 
 function quitRTC() {
-    RTC.quit();
+    RTC.quit(function(){
+        RTC =  null;
+    });
     $("#video-section").hide();
     $("#input-container").show();
     $("#remote-video-wrap").html("");
@@ -71,6 +73,10 @@ function onRemoteStreamUpdate(info) {
         }
         setTimeout(function(){
             video.srcObject = info.stream;
+            video.muted = true
+            video.autoplay = true
+            video.playsinline = true
+            video.play();
         },50)        
     } else {
         // console.log('欢迎用户' + info.userId + '加入房间');
@@ -142,15 +148,14 @@ function gotStream( opt ,succ){
     RTC.getLocalStream({
         video:true,
         audio:true,
-        // videoDevice:opt.videoDevice,
+        videoDevice:opt.videoDevice,
         // 如需指定分辨率，可以在attributes中增加对width和height的约束
         // 否则将获取摄像头的默认分辨率
         // 更多配置项 请参考 接口API
         // https://cloud.tencent.com/document/product/647/17251#webrtcapi.getlocalstream
         // attributes:{
-        //     width:960,
-        //     height:540,
-        //     frameRate:20
+        //     width:640,
+        //     height:320
         // }
     },function(info){
         var stream = info.stream;
@@ -177,8 +182,10 @@ function initRTC(opts) {
     
     
     RTC.enterRoom({
-         roomid : opts.roomid * 1,
-        privMap: 255
+        roomid : opts.roomid * 1,
+        privMap: 255,
+        appScene: opts.appScene,
+        role: opts.role
     },function(){
         if(opts && opts.closeLocalMedia ) return;
         gotStream({
@@ -223,12 +230,34 @@ function initRTC(opts) {
     RTC.on("onUserDefinedWebRTCEventNotice", function (info) {
         // console.error( 'onUserDefinedWebRTCEventNotice',info )
     });
+
+    RTC.on("onMuteAudio", (event) => {
+        console.warn(`user: ${event.userId} mute audio`);
+    });
+
+    RTC.on("onMuteVideo", (event) => {
+        console.warn(`user: ${event.userId} mute video`);
+    });
+
+    RTC.on("onUnmuteAudio", (event) => {
+        console.warn(`user: ${event.userId} unmute audio`);
+    });
+
+    RTC.on("onUnmuteVideo", (event) => {
+        console.warn(`user: ${event.userId} unmute video`);
+    });
 }
 
 function push( ) {
+    $("#start").show();
+    $("#stop").show();
+    console.log("我要视频通话");
     login(false);
 }
 function audience() {
+    $("#start").hide();
+    $("#stop").hide();
+    console.log("我要观看");
     login(true);
 }
 
@@ -295,6 +324,9 @@ function login(closeLocalMedia) {
                 $("#video-section").show();
                 $("#input-container").hide();
 
+                var appScene = closeLocalMedia ? 'Live' : 'VideoCall';
+                var role = closeLocalMedia ? 'audience' : 'anchor';
+
                 initRTC({
                     "userId": userId,
                     "userSig": userSig,
@@ -302,7 +334,9 @@ function login(closeLocalMedia) {
                     "sdkappid": sdkappid,
                     "accountType": accountType,
                     "closeLocalMedia": closeLocalMedia,
-                    "roomid": $("#roomid").val()
+                    "roomid": $("#roomid").val(),
+                    "appScene": appScene,
+                    "role": role,
                 });
 
             } else {
