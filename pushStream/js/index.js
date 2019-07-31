@@ -306,7 +306,7 @@ function getMediaStream(type, callback) {
     console.debug('camera ')
     RTC.getLocalStream({
       audio: true,
-      video: false,
+      video: true,
       attributes: {
         width: 400,
         height: 400,
