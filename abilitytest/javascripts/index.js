@@ -473,7 +473,7 @@ function startBrowserTest(){
 
     checkH264Support(function(encode, decode){
         titleText = "当前浏览器 不支持 !!!"
-        if( !support ){
+        if( !encode || !decode ){
             isWebRTCSupported = false
             if( !encode ){
                 titleText +="(不支持H264：编码)"
