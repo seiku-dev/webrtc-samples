@@ -377,7 +377,7 @@ function checkH264Support( callback ){
     offerToReceiveAudio: 1,
     offerToReceiveVideo: 1
     }).then(function(data){
-        var encode = !!data.sdp.toLowerCase().indexOf("h264") !== -1
+        var encode = !data.sdp.toLowerCase().indexOf("h264") === -1
         callback( encode , decode  )
         peer.close();
     },function(data){
@@ -476,10 +476,10 @@ function startBrowserTest(){
         if( !encode || !decode ){
             isWebRTCSupported = false
             if( !encode ){
-                titleText +="(不支持H264：编码)"
+                titleText +=" (不支持H264：编码)"
             }
             if( !decode ){
-                titleText +="(不支持H264：解码)"
+                titleText +=" (不支持H264：解码)"
             }
         }
         if( !isMobileBrowser){
