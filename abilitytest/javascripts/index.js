@@ -372,18 +372,16 @@ function checkH264DecodeSupport(){
 
 function checkH264Support( callback ){
     var peer = new RTCPeerConnection(null);
+    var decode = checkH264DecodeSupport()
     peer.createOffer({
     offerToReceiveAudio: 1,
     offerToReceiveVideo: 1
     }).then(function(data){
-        if( data.sdp.toLowerCase().indexOf("h264") === -1 || !checkH264DecodeSupport() ){
-            callback( false )
-        }else{
-            callback( true )
-        }
+        var encode = data.sdp.toLowerCase().indexOf("h264") === -1
+        callback( encode , decode  )
         peer.close();
     },function(data){
-        callback( false )
+        callback( false, decode )
     });
 }
 
@@ -473,11 +471,16 @@ function startBrowserTest(){
         }
     }
 
-    checkH264Support(function(support){
+    checkH264Support(function(encode, decode){
         titleText = "当前浏览器 不支持 !!!"
         if( !support ){
             isWebRTCSupported = false
-            titleText +="(不支持H264)"
+            if( !encode ){
+                titleText +="(不支持H264：编码)"
+            }
+            if( !decode ){
+                titleText +="(不支持H264：解码)"
+            }
         }
         if( !isMobileBrowser){
             if(isWebRTCSupported){
