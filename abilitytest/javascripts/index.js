@@ -361,6 +361,14 @@ function wsonclose(data){
     console.debug(data);
 }
 
+var canPlayType = function (element, type) {
+    return element.canPlayType(type) == 'probably';
+};
+
+function checkH264DecodeSupport(){
+    var element = document.createElement('video')
+    return !!element.canPlayType && (canPlayType(element, 'video/mp4; codecs="avc1.42E01E"') || canPlayType(element, 'video/mp4; codecs="avc1.42E01E, mp4a.40.2"'))
+}
 
 function checkH264Support( callback ){
     var peer = new RTCPeerConnection(null);
@@ -368,7 +376,7 @@ function checkH264Support( callback ){
     offerToReceiveAudio: 1,
     offerToReceiveVideo: 1
     }).then(function(data){
-        if( data.sdp.toLowerCase().indexOf("h264") === -1 ){
+        if( data.sdp.toLowerCase().indexOf("h264") === -1 || !checkH264DecodeSupport() ){
             callback( false )
         }else{
             callback( true )
