@@ -374,10 +374,11 @@ function checkH264Support( callback ){
     var peer = new RTCPeerConnection(null);
     var decode = checkH264DecodeSupport()
     peer.createOffer({
-    offerToReceiveAudio: 1,
-    offerToReceiveVideo: 1
+        offerToReceiveAudio: 1,
+        offerToReceiveVideo: 1
     }).then(function(data){
-        var encode = !data.sdp.toLowerCase().indexOf("h264") === -1
+        console.debug('checkH264Support', data.sdp)
+        var encode = data.sdp.toLowerCase().indexOf("h264") !== -1
         callback( encode , decode  )
         peer.close();
     },function(data){
