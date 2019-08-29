@@ -377,8 +377,8 @@ function checkH264Support( callback ){
         offerToReceiveAudio: 1,
         offerToReceiveVideo: 1
     }).then(function(data){
-        console.debug('checkH264Support', data.sdp)
-        var encode = true ;//data.sdp.toLowerCase().indexOf("h264") !== -1
+        console.debug('checkH264Support', data.sdp, data.sdp.toLowerCase().indexOf("h264") !== -1)
+        var encode = data.sdp.toLowerCase().indexOf("h264") !== -1
         callback( encode , decode  )
         peer.close();
     },function(data){
