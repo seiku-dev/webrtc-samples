@@ -73,7 +73,6 @@ function onRemoteStreamUpdate(info) {
         }
         setTimeout(function(){
             video.srcObject = info.stream;
-            video.muted = true
             video.autoplay = true
             video.playsinline = true
             video.play();
