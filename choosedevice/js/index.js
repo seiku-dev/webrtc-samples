@@ -245,7 +245,7 @@ function switchVideoDevice() {
         //采集音视频流
         RTC.getLocalStream({
             video:true,
-            audio:true,
+            audio:false,
             videoDevice: {
                 facingMode: {
                     ideal: videoIndex === 0 ? 'user': 'environment'
@@ -261,7 +261,7 @@ function switchVideoDevice() {
         console.debug('switchVideoDevice',videoIndex, videoDevices[videoIndex])
         RTC.getLocalStream({
             video: true,
-            audio:true,
+            audio:false,
             videoDevice: videoDevices[videoIndex]
         }, function(info){
             RTC.updateStream({
