@@ -16,7 +16,8 @@ var FetchSigCgi = 'https://www.qcloudtrtc.com/sxb_dev/?svc=account&cmd=authPrivM
 var sdkappid,
     accountType = 14418, // accounttype 还是在文档中会找到
     userSig,
-    username;
+    username,
+    localStream;
 
 
 function onKickout() {
@@ -103,6 +104,7 @@ function gotStream( opt ,succ){
         videoDevice:opt.videoDevice
     },function(info){
         var stream = info.stream;
+        localStream = stream;
         succ ( stream )
     });
 }
@@ -258,18 +260,25 @@ function switchVideoDevice() {
             })
         });
     }else{
-        console.debug('switchVideoDevice',videoIndex, videoDevices[videoIndex])
+        if( localStream ){
+            localStream.getTracks().forEach(track => {
+              track.stop();
+            });
+            localStream = null
+        }
         if( RTC.global.localStream ){
             RTC.global.localStream.getTracks().forEach(track => {
               track.stop();
             });
-            console.debug('stop localStream')
+            RTC.global.localStream = null
         }
+        console.debug('switchVideoDevice',videoIndex, videoDevices[videoIndex])
         RTC.getLocalStream({
             video: true,
-            audio: true,
+            audio:true,
             videoDevice: videoDevices[videoIndex]
         }, function(info){
+            localStream = info.stream;
             RTC.updateStream({
                 role: 'user', // or other role 
                 stream: info.stream
