@@ -261,8 +261,7 @@ function switchVideoDevice() {
         console.debug('switchVideoDevice',videoIndex, videoDevices[videoIndex])
         RTC.getLocalStream({
             video: true,
-            // audio:true,
-            audio:false,
+            audio:true,
             videoDevice: videoDevices[videoIndex]
         }, function(info){
             RTC.updateStream({
