@@ -244,8 +244,8 @@ function switchVideoDevice() {
     if( isSafari ){
         //采集音视频流
         RTC.getLocalStream({
-            video: true,
-            audio: false,
+            video:true,
+            audio:true,
             videoDevice: {
                 facingMode: {
                     ideal: videoIndex === 0 ? 'user': 'environment'
@@ -259,9 +259,15 @@ function switchVideoDevice() {
         });
     }else{
         console.debug('switchVideoDevice',videoIndex, videoDevices[videoIndex])
+        if( RTC.global.localStream ){
+            RTC.global.localStream.getTracks().forEach(track => {
+              track.stop();
+            });
+            console.debug('stop localStream')
+        }
         RTC.getLocalStream({
             video: true,
-            audio: false,
+            audio: true,
             videoDevice: videoDevices[videoIndex]
         }, function(info){
             RTC.updateStream({
